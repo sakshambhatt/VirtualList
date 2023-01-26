@@ -8,16 +8,7 @@ export default function use495Products() {
     staleTime: Infinity,
   });
 
-  const transformedProducts = [];
-  if (isSuccess && data?.data?.products?.length > 0) {
-    for (let i = 0; i < data?.data?.products?.length; i += 3) {
-      const row = [];
-      for (let j = 0; j < 3; j++) {
-        row.push(data?.data?.products?.[i + j]);
-      }
-      transformedProducts.push(row);
-    }
-  }
+  const products = data?.data?.products as Array<Product>;
 
-  return {products: transformedProducts, isSuccess, isFetching};
+  return {products, isSuccess, isFetching};
 }
