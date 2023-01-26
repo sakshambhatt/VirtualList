@@ -2,7 +2,7 @@ import {useQuery} from '@tanstack/react-query';
 import get495Products from '../api/get495products';
 
 export default function use495Products() {
-  const {data, isSuccess, isFetching} = useQuery({
+  const {data, isSuccess, isFetching, isError} = useQuery({
     queryKey: ['495-products'],
     queryFn: get495Products,
     staleTime: Infinity,
@@ -10,5 +10,5 @@ export default function use495Products() {
 
   const products = data?.data?.products as Array<Product>;
 
-  return {products, isSuccess, isFetching};
+  return {products, isSuccess, isFetching, isError};
 }
