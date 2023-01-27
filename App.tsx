@@ -14,6 +14,7 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Tab.Navigator
+          initialRouteName="Meesho"
           screenOptions={({route}) => ({
             tabBarIcon: ({color, size}: {color: string; size: number}) => {
               if (route.name === 'Simple') {

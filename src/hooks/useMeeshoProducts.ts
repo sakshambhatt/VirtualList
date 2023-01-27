@@ -6,5 +6,8 @@ export default function useMeeshoProducts() {
     ['get-meesho-products'],
     getMeeshoProducts,
   );
-  return {data, isFetching, isError};
+
+  const sectionWiseProducts = data?.data?.sectionWiseProducts || [];
+
+  return {sectionWiseProducts, isFetching, isError};
 }
