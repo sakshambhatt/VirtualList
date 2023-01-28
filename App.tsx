@@ -5,6 +5,7 @@ import SimpleVl from './src/screens/SimpleVl';
 import MeeshoVl from './src/screens/MeeshoVl';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {meeshoPrimaryColor} from './src/configs/colors';
 
 const Tab = createBottomTabNavigator();
 const queryClient = new QueryClient();
@@ -27,7 +28,7 @@ export default function App() {
                 );
               }
             },
-            tabBarActiveTintColor: '#f43397',
+            tabBarActiveTintColor: meeshoPrimaryColor,
             tabBarInactiveTintColor: 'gray',
           })}>
           <Tab.Screen name="Simple" component={SimpleVl} />

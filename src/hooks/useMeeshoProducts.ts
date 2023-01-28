@@ -10,12 +10,10 @@ export default function useMeeshoProducts() {
   });
 
   const sectionWiseProducts =
-    data?.data?.sectionWiseProducts?.map(
-      (section: {id: string; data: Array<Product>}) => ({
-        ...section,
-        data: [{key: section.id, list: section.data}],
-      }),
-    ) || [];
+    data?.data?.sectionWiseProducts?.map((section: Section) => ({
+      ...section,
+      data: [{key: section.id, list: section.data}],
+    })) || [];
 
   return {sectionWiseProducts, isFetching, isError, refetch};
 }

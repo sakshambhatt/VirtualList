@@ -4,3 +4,5 @@ type Product = {
   imageUrl: string;
   categoryId: string;
 };
+
+type Section = {id: string; title: string; data: Array<Product>};
