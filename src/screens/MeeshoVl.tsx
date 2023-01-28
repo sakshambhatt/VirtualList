@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {FlatList, SectionList, StyleSheet, Text, View} from 'react-native';
 import CategoryCard from '../components/CategoryCard';
 import SectionFlatList from '../components/SectionFlatList';
@@ -17,6 +17,22 @@ function MeeshoVl() {
 
   const setThisAsCurrentSection = (sectionId: string) =>
     setCurrentSection(sectionId);
+
+  const renderCategoryItem = useCallback(
+    ({item}: {item: any}) => (
+      <CategoryCard
+        isActive={item.id === currentSection}
+        item={{id: item.id, title: item.title, iconName: item.iconName}}
+        setThisAsCurrentSection={setThisAsCurrentSection}
+      />
+    ),
+    [currentSection],
+  );
+
+  const renderSectionItem = useCallback(
+    ({item}: {item: any}) => <SectionFlatList item={item} />,
+    [],
+  );
 
   useEffect(() => {
     if (currentSection === null && isSuccess) {
@@ -52,19 +68,13 @@ function MeeshoVl() {
     <View style={styles.meeshoVlContainer}>
       <FlatList
         data={sectionWiseProducts}
-        renderItem={({item}) => (
-          <CategoryCard
-            isActive={item.id === currentSection}
-            item={{id: item.id, title: item.title, iconName: item.iconName}}
-            setThisAsCurrentSection={setThisAsCurrentSection}
-          />
-        )}
+        renderItem={renderCategoryItem}
         initialNumToRender={9}
       />
       <SectionList
         sections={sectionWiseProducts}
         keyExtractor={item => item.id}
-        renderItem={({item}) => <SectionFlatList item={item} />}
+        renderItem={renderSectionItem}
         renderSectionHeader={({section: {title}}) => (
           <SectionHeader title={title} />
         )}
