@@ -8,25 +8,41 @@ import {toastError} from '../services/toast';
 import {commonStyles} from '../styles/commonStyles';
 
 function MeeshoVl() {
-  const {sectionWiseProducts, isFetching, isError, refetch, isSuccess} =
-    useMeeshoProducts();
+  const {
+    sectionWiseProducts,
+    isFetching,
+    isError,
+    refetch,
+    isSuccess,
+    sectionIdToIndexMap,
+  } = useMeeshoProducts();
 
   const [currentSection, setCurrentSection] = useState<string | null>(null);
 
   const sectionListRef = useRef<SectionList>(null);
 
-  const setThisAsCurrentSection = (sectionId: string) =>
-    setCurrentSection(sectionId);
-
   const renderCategoryItem = useCallback(
-    ({item}: {item: any}) => (
-      <CategoryCard
-        isActive={item.id === currentSection}
-        item={{id: item.id, title: item.title, iconName: item.iconName}}
-        setThisAsCurrentSection={setThisAsCurrentSection}
-      />
-    ),
-    [currentSection],
+    ({item}: {item: any}) => {
+      const setThisAsCurrentSection = (sectionId: string) => {
+        setCurrentSection(sectionId);
+        if (sectionListRef.current !== null) {
+          const desiredSectionIndex = sectionIdToIndexMap.get(sectionId);
+          sectionListRef.current.scrollToLocation({
+            itemIndex: 0,
+            sectionIndex: desiredSectionIndex,
+          });
+        }
+      };
+
+      return (
+        <CategoryCard
+          isActive={item.id === currentSection}
+          item={{id: item.id, title: item.title, iconName: item.iconName}}
+          setThisAsCurrentSection={setThisAsCurrentSection}
+        />
+      );
+    },
+    [currentSection, sectionIdToIndexMap],
   );
 
   const renderSectionItem = useCallback(
@@ -37,16 +53,6 @@ function MeeshoVl() {
   useEffect(() => {
     if (currentSection === null && isSuccess) {
       setCurrentSection(sectionWiseProducts[0].id);
-    }
-
-    if (currentSection !== null && sectionListRef.current !== null) {
-      const currentSectionIndex = sectionWiseProducts.findIndex(
-        sectionedProduct => sectionedProduct.id === currentSection,
-      );
-      sectionListRef.current.scrollToLocation({
-        itemIndex: 0,
-        sectionIndex: currentSectionIndex,
-      });
     }
   }, [currentSection, isSuccess, sectionWiseProducts]);
 

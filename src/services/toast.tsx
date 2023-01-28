@@ -6,7 +6,7 @@ const toastSuccess = (text1: string, text2?: string) =>
     text1,
     text2,
     autoHide: true,
-    visibilityTime: 5000,
+    visibilityTime: 3000,
   });
 
 const toastError = (text1: string, text2?: string) =>
@@ -15,7 +15,7 @@ const toastError = (text1: string, text2?: string) =>
     text1,
     text2,
     autoHide: true,
-    visibilityTime: 5000,
+    visibilityTime: 3000,
   });
 
 export {toastSuccess, toastError};

@@ -9,17 +9,33 @@ export default function useMeeshoProducts() {
     onError: (error: any) => console.log({error}),
   });
 
-  const sectionWiseProducts = (data?.data?.sectionWiseProducts?.map(
-    (section: Section) => ({
-      ...section,
-      data: [{key: section.id, list: section.data}],
-    }),
-  ) || []) as Array<{
+  const sectionWiseProducts = [] as Array<{
     id: string;
     title: string;
     iconName: string;
-    data: Array<{key: string; list: Product}>;
+    data: Array<{key: string; list: Array<Product>}>;
   }>;
 
-  return {sectionWiseProducts, isFetching, isError, refetch, isSuccess};
+  const sectionIdToIndexMap = new Map();
+
+  if (isSuccess && data?.data?.sectionWiseProducts?.length > 0) {
+    data?.data?.sectionWiseProducts?.forEach(
+      (section: Section, index: number) => {
+        sectionIdToIndexMap.set(section.id, index);
+        sectionWiseProducts.push({
+          ...section,
+          data: [{key: section.id, list: section.data}],
+        });
+      },
+    );
+  }
+
+  return {
+    sectionWiseProducts,
+    isFetching,
+    isError,
+    refetch,
+    isSuccess,
+    sectionIdToIndexMap,
+  };
 }
