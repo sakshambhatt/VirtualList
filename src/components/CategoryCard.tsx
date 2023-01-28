@@ -1,19 +1,31 @@
 import React, {memo} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {meeshoPrimaryColor} from '../configs/colors';
 import {commonStyles} from '../styles/commonStyles';
 
-function CategoryCard({title, iconName}: {title: string; iconName: string}) {
+function CategoryCard({
+  isActive,
+  item,
+  setThisAsCurrentSection,
+}: {
+  isActive: boolean;
+  item: {id: string; title: string; iconName: string};
+  setThisAsCurrentSection: (sectionId: string) => void;
+}) {
+  const containerStyle = isActive
+    ? {...styles.categoryCardContainer, ...styles.activeCategory}
+    : {...styles.categoryCardContainer};
+  const textStyle = isActive ? {color: meeshoPrimaryColor} : commonStyles.text;
+  const iconColor = isActive ? meeshoPrimaryColor : 'gray';
+
   return (
-    <View
-      style={{
-        ...styles.categoryCardContainer,
-        ...styles.activeCategory,
-      }}>
-      <MaterialIcons name={iconName} size={22} color={meeshoPrimaryColor} />
-      <Text style={commonStyles.text}>{title}</Text>
-    </View>
+    <Pressable
+      style={containerStyle}
+      onPress={() => setThisAsCurrentSection(item.id)}>
+      <MaterialIcons name={item.iconName} size={22} color={iconColor} />
+      <Text style={textStyle}>{item.title}</Text>
+    </Pressable>
   );
 }
 

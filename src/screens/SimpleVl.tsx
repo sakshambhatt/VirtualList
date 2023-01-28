@@ -7,7 +7,13 @@ import {commonStyles} from '../styles/commonStyles';
 function SimpleVl() {
   const {products, isFetching, isError, refetch} = use495Products();
 
-  if (isError) {
+  if (isFetching) {
+    return (
+      <View style={commonStyles.messageContainer}>
+        <Text style={commonStyles.loadingText}>Loading...</Text>
+      </View>
+    );
+  } else if (isError) {
     return (
       <View style={commonStyles.messageContainer}>
         <Text style={commonStyles.errorText}>Error...</Text>

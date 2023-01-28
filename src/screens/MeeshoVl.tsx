@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, SectionList, Text, View} from 'react-native';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
@@ -7,8 +7,21 @@ import useMeeshoProducts from '../hooks/useMeeshoProducts';
 import {commonStyles} from '../styles/commonStyles';
 
 function MeeshoVl() {
-  const {sectionWiseProducts, isFetching, isError, refetch} =
+  const {sectionWiseProducts, isFetching, isError, refetch, isSuccess} =
     useMeeshoProducts();
+
+  const [currentSection, setCurrentSection] = useState<string | null>(null);
+
+  const setThisAsCurrentSection = (sectionId: string) =>
+    setCurrentSection(sectionId);
+
+  useEffect(() => {
+    if (currentSection === null && isSuccess) {
+      setCurrentSection(sectionWiseProducts[0].id);
+    }
+  }, [currentSection, isSuccess, sectionWiseProducts]);
+
+  console.log({currentSection});
 
   if (isFetching) {
     return (
@@ -16,9 +29,7 @@ function MeeshoVl() {
         <Text style={commonStyles.loadingText}>Loading...</Text>
       </View>
     );
-  }
-
-  if (isError) {
+  } else if (isError) {
     return (
       <View style={commonStyles.messageContainer}>
         <Text style={commonStyles.errorText}>Error...</Text>
@@ -31,7 +42,11 @@ function MeeshoVl() {
       <FlatList
         data={sectionWiseProducts}
         renderItem={({item}) => (
-          <CategoryCard title={item.title} iconName={item.iconName} />
+          <CategoryCard
+            isActive={item.id === currentSection}
+            item={{id: item.id, title: item.title, iconName: item.iconName}}
+            setThisAsCurrentSection={setThisAsCurrentSection}
+          />
         )}
       />
       <SectionList
