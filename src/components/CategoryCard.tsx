@@ -13,6 +13,7 @@ function CategoryCard({
   item: {id: string; title: string; iconName: string};
   setThisAsCurrentSection: (sectionId: string) => void;
 }) {
+  const handleCardPress = () => setThisAsCurrentSection(item.id);
   const containerStyle = isActive
     ? {...styles.categoryCardContainer, ...styles.activeCategory}
     : {...styles.categoryCardContainer};
@@ -20,9 +21,7 @@ function CategoryCard({
   const iconColor = isActive ? meeshoPrimaryColor : 'gray';
 
   return (
-    <Pressable
-      style={containerStyle}
-      onPress={() => setThisAsCurrentSection(item.id)}>
+    <Pressable style={containerStyle} onPress={handleCardPress}>
       <MaterialIcons name={item.iconName} size={22} color={iconColor} />
       <Text style={textStyle}>{item.title}</Text>
     </Pressable>

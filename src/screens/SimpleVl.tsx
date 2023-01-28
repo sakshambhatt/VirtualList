@@ -40,7 +40,6 @@ function SimpleVl() {
         horizontal={false}
         refreshing={isFetching}
         onRefresh={refetch}
-        style={{backgroundColor: 'aqua'}}
         initialNumToRender={27}
       />
     </View>
