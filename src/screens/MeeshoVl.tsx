@@ -1,14 +1,22 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
 import {FlatList, SectionList, Text, View} from 'react-native';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
+import SectionHeader from '../components/SectionHeader';
 import useMeeshoProducts from '../hooks/useMeeshoProducts';
 import {commonStyles} from '../styles/commonStyles';
 
 function MeeshoVl() {
   const {sectionWiseProducts, isFetching, isError, refetch} =
     useMeeshoProducts();
+
+  if (isFetching) {
+    return (
+      <View style={commonStyles.messageContainer}>
+        <Text style={commonStyles.loadingText}>Loading...</Text>
+      </View>
+    );
+  }
 
   if (isError) {
     return (
@@ -27,7 +35,6 @@ function MeeshoVl() {
         )}
       />
       <SectionList
-        style={{backgroundColor: 'aqua'}}
         sections={sectionWiseProducts}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
@@ -47,7 +54,7 @@ function MeeshoVl() {
           />
         )}
         renderSectionHeader={({section: {title}}) => (
-          <Text style={styles.sectionTitle}>{title}</Text>
+          <SectionHeader title={title} />
         )}
         onRefresh={refetch}
         refreshing={isFetching}
@@ -56,9 +63,5 @@ function MeeshoVl() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  sectionTitle: {color: 'black', fontSize: 18, fontWeight: 'bold'},
-});
 
 export default MeeshoVl;
