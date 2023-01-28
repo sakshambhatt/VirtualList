@@ -6,6 +6,7 @@ import MeeshoVl from './src/screens/MeeshoVl';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {meeshoPrimaryColor} from './src/configs/colors';
+import Toast from 'react-native-toast-message';
 
 const Tab = createBottomTabNavigator();
 const queryClient = new QueryClient();
@@ -34,6 +35,7 @@ export default function App() {
           <Tab.Screen name="Simple" component={SimpleVl} />
           <Tab.Screen name="Meesho" component={MeeshoVl} />
         </Tab.Navigator>
+        <Toast />
       </NavigationContainer>
     </QueryClientProvider>
   );

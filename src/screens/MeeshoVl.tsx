@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react';
-import {FlatList, SectionList, Text, View} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {FlatList, SectionList, StyleSheet, Text, View} from 'react-native';
 import CategoryCard from '../components/CategoryCard';
-import ProductCard from '../components/ProductCard';
+import SectionFlatList from '../components/SectionFlatList';
 import SectionHeader from '../components/SectionHeader';
 import useMeeshoProducts from '../hooks/useMeeshoProducts';
+import {toastError} from '../services/toast';
 import {commonStyles} from '../styles/commonStyles';
 
 function MeeshoVl() {
@@ -12,6 +13,8 @@ function MeeshoVl() {
 
   const [currentSection, setCurrentSection] = useState<string | null>(null);
 
+  const sectionListRef = useRef<SectionList>(null);
+
   const setThisAsCurrentSection = (sectionId: string) =>
     setCurrentSection(sectionId);
 
@@ -19,9 +22,17 @@ function MeeshoVl() {
     if (currentSection === null && isSuccess) {
       setCurrentSection(sectionWiseProducts[0].id);
     }
-  }, [currentSection, isSuccess, sectionWiseProducts]);
 
-  console.log({currentSection});
+    if (currentSection !== null && sectionListRef.current !== null) {
+      const currentSectionIndex = sectionWiseProducts.findIndex(
+        sectionedProduct => sectionedProduct.id === currentSection,
+      );
+      sectionListRef.current.scrollToLocation({
+        itemIndex: 0,
+        sectionIndex: currentSectionIndex,
+      });
+    }
+  }, [currentSection, isSuccess, sectionWiseProducts]);
 
   if (isFetching) {
     return (
@@ -38,7 +49,7 @@ function MeeshoVl() {
   }
 
   return (
-    <View style={{flexDirection: 'row'}}>
+    <View style={styles.meeshoVlContainer}>
       <FlatList
         data={sectionWiseProducts}
         renderItem={({item}) => (
@@ -48,35 +59,27 @@ function MeeshoVl() {
             setThisAsCurrentSection={setThisAsCurrentSection}
           />
         )}
+        initialNumToRender={9}
       />
       <SectionList
         sections={sectionWiseProducts}
         keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <FlatList
-            style={{backgroundColor: 'pink'}}
-            data={item.list}
-            keyExtractor={product => product.id}
-            numColumns={3}
-            renderItem={({item: product}) => (
-              <ProductCard
-                key={product.id}
-                productImg={product.imageUrl}
-                productName={product.name}
-              />
-            )}
-            initialNumToRender={35}
-          />
-        )}
+        renderItem={({item}) => <SectionFlatList item={item} />}
         renderSectionHeader={({section: {title}}) => (
           <SectionHeader title={title} />
         )}
         onRefresh={refetch}
         refreshing={isFetching}
         initialNumToRender={15}
+        ref={sectionListRef}
+        onScrollToIndexFailed={() => toastError('Scrolling failed!')}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  meeshoVlContainer: {flexDirection: 'row'},
+});
 
 export default MeeshoVl;

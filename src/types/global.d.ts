@@ -5,4 +5,9 @@ type Product = {
   categoryId: string;
 };
 
-type Section = {id: string; title: string; data: Array<Product>};
+type Section = {
+  id: string;
+  title: string;
+  iconName: string;
+  data: Array<Product>;
+};

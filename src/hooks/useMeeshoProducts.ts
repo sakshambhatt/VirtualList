@@ -6,14 +6,20 @@ export default function useMeeshoProducts() {
     queryKey: ['get-meesho-products'],
     queryFn: getMeeshoProducts,
     staleTime: Infinity,
-    onError: (error: any) => console.log(error),
+    onError: (error: any) => console.log({error}),
   });
 
-  const sectionWiseProducts =
-    data?.data?.sectionWiseProducts?.map((section: Section) => ({
+  const sectionWiseProducts = (data?.data?.sectionWiseProducts?.map(
+    (section: Section) => ({
       ...section,
       data: [{key: section.id, list: section.data}],
-    })) || [];
+    }),
+  ) || []) as Array<{
+    id: string;
+    title: string;
+    iconName: string;
+    data: Array<{key: string; list: Product}>;
+  }>;
 
   return {sectionWiseProducts, isFetching, isError, refetch, isSuccess};
 }
