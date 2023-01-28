@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
 
-export default function ProductCard({
+function ProductCard({
   productName,
   productImg,
 }: {
@@ -21,3 +21,5 @@ const styles = StyleSheet.create({
   productImage: {height: 50, width: 50, borderRadius: 50},
   productText: {color: 'black', fontSize: 11},
 });
+
+export default memo(ProductCard);

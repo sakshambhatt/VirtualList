@@ -2,20 +2,15 @@ import React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import ProductCard from '../components/ProductCard';
 import use495Products from '../hooks/use495Products';
+import {commonStyles} from '../styles/commonStyles';
 
 function SimpleVl() {
-  const {products, isFetching, isError} = use495Products();
+  const {products, isFetching, isError, refetch} = use495Products();
 
-  if (isFetching) {
+  if (isError) {
     return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{color: 'green'}}>Loading...</Text>
-      </View>
-    );
-  } else if (isError) {
-    return (
-      <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{color: 'red'}}>Error...</Text>
+      <View style={commonStyles.messageContainer}>
+        <Text style={commonStyles.errorText}>Error...</Text>
       </View>
     );
   }
@@ -33,6 +28,9 @@ function SimpleVl() {
         )}
         numColumns={3}
         horizontal={false}
+        refreshing={isFetching}
+        onRefresh={refetch}
+        style={{backgroundColor: 'aqua'}}
       />
     </View>
   );

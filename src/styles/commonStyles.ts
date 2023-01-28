@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-export const styles = StyleSheet.create({
+export const commonStyles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
@@ -12,4 +12,7 @@ export const styles = StyleSheet.create({
     backgroundColor: 'slate',
     color: 'white',
   },
+  messageContainer: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+  loadingText: {color: 'green'},
+  errorText: {color: 'red'},
 });
