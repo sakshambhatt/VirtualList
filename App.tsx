@@ -16,14 +16,14 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
         <Tab.Navigator
-          initialRouteName="Meesho"
+          initialRouteName="Neesho"
           screenOptions={({route}) => ({
             tabBarIcon: ({color, size}: {color: string; size: number}) => {
               if (route.name === 'Simple') {
                 return (
                   <MaterialIcons name="view-list" size={size} color={color} />
                 );
-              } else if (route.name === 'Meesho') {
+              } else if (route.name === 'Neesho') {
                 return (
                   <MaterialIcons name="dashboard" size={size} color={color} />
                 );
@@ -33,7 +33,7 @@ export default function App() {
             tabBarInactiveTintColor: 'gray',
           })}>
           <Tab.Screen name="Simple" component={SimpleVl} />
-          <Tab.Screen name="Meesho" component={MeeshoVl} />
+          <Tab.Screen name="Neesho" component={MeeshoVl} />
         </Tab.Navigator>
         <Toast />
       </NavigationContainer>
