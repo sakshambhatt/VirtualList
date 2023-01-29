@@ -16,7 +16,7 @@ export default function useMeeshoProducts() {
     data: Array<{key: string; list: Array<Product>}>;
   }>;
 
-  const sectionIdToIndexMap = new Map();
+  const sectionIdToIndexMap = new Map<string, number>();
 
   if (isSuccess && data?.data?.sectionWiseProducts?.length > 0) {
     data?.data?.sectionWiseProducts?.forEach(

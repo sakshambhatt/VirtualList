@@ -26,7 +26,7 @@ function MeeshoVl() {
       const setThisAsCurrentSection = (sectionId: string) => {
         setCurrentSection(sectionId);
         if (sectionListRef.current !== null) {
-          const desiredSectionIndex = sectionIdToIndexMap.get(sectionId);
+          const desiredSectionIndex = sectionIdToIndexMap.get(sectionId) || 0;
           sectionListRef.current.scrollToLocation({
             itemIndex: 0,
             sectionIndex: desiredSectionIndex,

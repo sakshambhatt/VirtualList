@@ -1,5 +1,6 @@
 import React, {memo} from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 function ProductCard({
   productName,
@@ -10,7 +11,7 @@ function ProductCard({
 }) {
   return (
     <View style={styles.productView}>
-      <Image source={{uri: productImg}} style={styles.productImage} />
+      <FastImage source={{uri: productImg}} style={styles.productImage} />
       <Text style={styles.productText}>{productName}</Text>
     </View>
   );
