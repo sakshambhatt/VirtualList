@@ -11,9 +11,12 @@ export default function useMeeshoProducts() {
     onError: (error: any) => console.log({error}),
   });
 
-  const categories = [] as Array<{id: string; title: string; iconName: string}>;
-
-  const sectionWiseProducts = [] as Array<string | Product>;
+  let sectionWiseProducts = [] as Array<{
+    id: string;
+    title: string;
+    iconName: string;
+    data: Array<Product>;
+  }>;
 
   const sectionIdToIndexMap = new Map<string, number>();
 
@@ -21,19 +24,15 @@ export default function useMeeshoProducts() {
     if (currentSection === null) {
       setCurrentSection(data?.data?.sectionWiseProducts?.[0]?.id);
     }
-    data?.data?.sectionWiseProducts?.forEach((section: Section) => {
-      categories.push({
-        id: section.id,
-        title: section.title,
-        iconName: section.iconName,
-      });
-      sectionIdToIndexMap.set(section.id, sectionWiseProducts.length);
-      sectionWiseProducts.push(section.title, ...section.data);
-    });
+    sectionWiseProducts = [...data?.data?.sectionWiseProducts];
+    data?.data?.sectionWiseProducts?.forEach(
+      (section: Section, index: number) => {
+        sectionIdToIndexMap.set(section.id, index);
+      },
+    );
   }
 
   return {
-    categories,
     sectionWiseProducts,
     isFetching,
     isError,

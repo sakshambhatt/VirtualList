@@ -3,14 +3,15 @@ import {StyleSheet, Text, View} from 'react-native';
 
 const SectionHeader = ({title}: {title: string}) => {
   return (
-    <View>
+    <View style={styles.headerContainer}>
       <Text style={styles.sectionTitle}>{title}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  sectionTitle: {color: 'black', fontSize: 18, fontWeight: 'bold'},
+  headerContainer: {paddingLeft: 10},
+  sectionTitle: {color: 'black', fontSize: 20, fontWeight: 'bold'},
 });
 
 export default memo(SectionHeader);

@@ -1,6 +1,6 @@
 import {FlashList} from '@shopify/flash-list';
 import React, {useCallback, useRef} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import CategoryCard from '../components/CategoryCard';
 import ProductCard from '../components/ProductCard';
 import SectionHeader from '../components/SectionHeader';
@@ -9,7 +9,6 @@ import {commonStyles} from '../styles/commonStyles';
 
 function MeeshoVl() {
   const {
-    categories,
     sectionWiseProducts,
     isFetching,
     isError,
@@ -19,7 +18,7 @@ function MeeshoVl() {
     setCurrentSection,
   } = useMeeshoProducts();
 
-  const sectionListRef = useRef<FlashList<string | Product>>(null);
+  const sectionListRef = useRef<FlashList<Section>>(null);
 
   const setThisAsCurrentSection = useCallback(
     (sectionId: string) => {
@@ -30,6 +29,7 @@ function MeeshoVl() {
           animated: true,
           index: desiredSectionIndex,
         });
+        // setCurrentSection(sectionId);
       }
     },
     [sectionIdToIndexMap, setCurrentSection],
@@ -88,9 +88,9 @@ function MeeshoVl() {
   return (
     <View style={styles.meeshoVlContainer}>
       {/* List of Categories */}
-      <View style={{width: 75}}>
+      <View style={styles.categoryListContainer}>
         <FlashList
-          data={categories}
+          data={sectionWiseProducts}
           renderItem={renderCategoryItem}
           estimatedItemSize={95}
         />
@@ -98,23 +98,30 @@ function MeeshoVl() {
       {/* List of Products w.r.t. categories */}
       <FlashList
         data={sectionWiseProducts}
-        renderItem={({item}) => {
-          if (typeof item === 'string') {
-            return <SectionHeader title={item} />;
-          } else {
-            return (
-              <ProductCard productImg={item.imageUrl} productName={item.name} />
-            );
-          }
-        }}
-        numColumns={3}
-        getItemType={item => {
-          return typeof item === 'string' ? 'sectionHeader' : 'productList';
-        }}
-        estimatedItemSize={100}
-        ref={sectionListRef}
         onRefresh={refetch}
         refreshing={isFetching}
+        estimatedItemSize={762}
+        ref={sectionListRef}
+        // onViewableItemsChanged={onCheckViewableItems}
+        // viewabilityConfig={{
+        //   itemVisiblePercentThreshold: 50, //means if 50% of the item is visible
+        // }}
+        renderItem={({item}) => (
+          <View style={styles.innerProductListContainer}>
+            <SectionHeader title={item.title} />
+            <FlashList
+              data={item.data}
+              renderItem={({item: product}) => (
+                <ProductCard
+                  productImg={product.imageUrl}
+                  productName={product.name}
+                />
+              )}
+              numColumns={3}
+              estimatedItemSize={100}
+            />
+          </View>
+        )}
       />
     </View>
   );
@@ -122,6 +129,11 @@ function MeeshoVl() {
 
 const styles = StyleSheet.create({
   meeshoVlContainer: {flex: 1, flexDirection: 'row'},
+  categoryListContainer: {width: 75},
+  innerProductListContainer: {
+    height: Dimensions.get('window').height,
+    paddingBottom: 20,
+  },
 });
 
 export default MeeshoVl;
